@@ -77,10 +77,18 @@ namespace SafetyTourismAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Recomendacoe>> PostRecomendacoe(Recomendacoe recomendacoe)
         {
-            _context.Recomendacoe.Add(recomendacoe);
-            await _context.SaveChangesAsync();
+            Recomendacoe r = await _context.Recomendacoe.SingleOrDefaultAsync(r => r.IdZona == recomendacoe.IdZona);
+            if (r == null)
+            {
+                _context.Recomendacoe.Add(recomendacoe);
+                await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetRecomendacoe), new { id = recomendacoe.RecomendacoeId }, recomendacoe);
+                return CreatedAtAction(nameof(GetRecomendacoe), new { id = recomendacoe.RecomendacoeId }, recomendacoe);
+            }
+            else
+            {
+                return Conflict();
+            }
         }
 
         // DELETE: api/Recomendacoes/5
