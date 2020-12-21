@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using SafetyTourismAPI.Data;
+using SafetyTourismAPI.Models;
 
 namespace SafetyTourismAPI
 {
@@ -28,6 +28,8 @@ namespace SafetyTourismAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<Context>(opt =>
+                                               opt.UseInMemoryDatabase("STapiContext"));
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -35,7 +37,7 @@ namespace SafetyTourismAPI
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "SafetyTourismAPI", Version = "v1" });
             });
 
-            services.AddDbContext<SafetyTourismAPIContext>(options =>
+            services.AddDbContext<Context>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("SafetyTourismAPIContext")));
         }
 
