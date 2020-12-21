@@ -9,7 +9,7 @@ using SafetyTourismAPI.Models;
 
 namespace SafetyTourismAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/Recomendacoes")]
     [ApiController]
     public class RecomendacoesController : ControllerBase
     {
@@ -24,7 +24,7 @@ namespace SafetyTourismAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Recomendacoe>>> GetRecomendacoe()
         {
-            return await _context.Recomendacoe.ToListAsync();
+         return await _context.Recomendacoe.Include(c => c.Zona).ToListAsync();
         }
 
         // GET: api/Recomendacoes/5
@@ -46,7 +46,7 @@ namespace SafetyTourismAPI.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutRecomendacoe(long id, Recomendacoe recomendacoe)
         {
-            if (id != recomendacoe.Id)
+            if (id != recomendacoe.RecomendacoeId)
             {
                 return BadRequest();
             }
@@ -80,7 +80,7 @@ namespace SafetyTourismAPI.Controllers
             _context.Recomendacoe.Add(recomendacoe);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetRecomendacoe", new { id = recomendacoe.Id }, recomendacoe);
+            return CreatedAtAction(nameof(GetRecomendacoe), new { id = recomendacoe.RecomendacoeId }, recomendacoe);
         }
 
         // DELETE: api/Recomendacoes/5
@@ -101,7 +101,7 @@ namespace SafetyTourismAPI.Controllers
 
         private bool RecomendacoeExists(long id)
         {
-            return _context.Recomendacoe.Any(e => e.Id == id);
+            return _context.Recomendacoe.Any(e => e.RecomendacoeId == id);
         }
     }
 }
