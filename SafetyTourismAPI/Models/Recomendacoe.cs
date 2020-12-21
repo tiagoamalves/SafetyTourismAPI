@@ -8,7 +8,7 @@ namespace SafetyTourismAPI.Models
 {
     public class Recomendacoe
     {
-        public long Id { get; set; }
+        public long RecomendacoeId { get; set; }
         public string Info { get; set; }
         [ForeignKey("IDZona")]
         public long IdZona { get; set; }
