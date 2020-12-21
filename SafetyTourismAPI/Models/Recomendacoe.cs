@@ -14,6 +14,7 @@ namespace SafetyTourismAPI.Models
         public long IdZona { get; set; }
         public Zona Zona { get; set; }
         public DateTime Date { get; set; }
+        
         public int ValidadeNota { get; set; }
     }
 }
