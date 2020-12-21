@@ -9,11 +9,9 @@ namespace SafetyTourismAPI.Models
     public class Recomendacoe
     {
         public long NotaId { get; set; }
-        public string info { get; set; }
-
-        [ForeignKey("CodigoZonaGeográfica")]
-        public Zona zona { get; set; }
-        public DateTime date { get; set; }
+        public string Info { get; set; }
+        public Zona Zona { get; set; }
+        public DateTime Date { get; set; }
         public int ValidadeNota { get; set; }
     }
 }
