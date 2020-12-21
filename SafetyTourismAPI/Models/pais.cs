@@ -10,8 +10,11 @@ namespace SafetyTourismAPI.Models
     {
             public long Id { get; set; }
             public string Name { get; set; }
+            public long IdZona { get; set; }
 
-            [ForeignKey("IDZonaGeografica")]
+            [ForeignKey("IdZona")]
             public Zona Zona { get; set; }
+           
+           
     }
 }
