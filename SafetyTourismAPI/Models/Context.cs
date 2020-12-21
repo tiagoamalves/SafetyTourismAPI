@@ -17,5 +17,7 @@ namespace SafetyTourismAPI.Models
         public DbSet<Pais> Pais { get; set; }
 
         public DbSet<SafetyTourismAPI.Models.Zona> Zona { get; set; }
+
+        public DbSet<SafetyTourismAPI.Models.Recomendacoe> Recomendacoe { get; set; }
     }
 }
