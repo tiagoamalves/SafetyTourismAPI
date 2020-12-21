@@ -9,7 +9,7 @@ using SafetyTourismAPI.Models;
 
 namespace SafetyTourismAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/Zonas")]
     [ApiController]
     public class ZonasController : ControllerBase
     {
