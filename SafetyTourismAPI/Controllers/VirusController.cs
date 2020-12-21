@@ -5,18 +5,17 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using SafetyTourismAPI.Data;
 using SafetyTourismAPI.Models;
 
 namespace SafetyTourismAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/Virus")]
     [ApiController]
     public class VirusController : ControllerBase
     {
-        private readonly SafetyTourismAPIContext _context;
+        private readonly Context _context;
 
-        public VirusController(SafetyTourismAPIContext context)
+        public VirusController(Context context)
         {
             _context = context;
         }
@@ -78,10 +77,18 @@ namespace SafetyTourismAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Virus>> PostVirus(Virus virus)
         {
-            _context.Virus.Add(virus);
-            await _context.SaveChangesAsync();
+            Virus v = await _context.Virus.SingleOrDefaultAsync(v => v.NomeVirus == virus.NomeVirus);
+            if (v == null)
+            {
+                _context.Virus.Add(virus);
+                await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetVirus", new { id = virus.virusID }, virus);
+                return CreatedAtAction(nameof(GetVirus), new { id = virus.virusID }, virus);
+            }
+            else
+            {
+                return Conflict();
+            }
         }
 
         // DELETE: api/Virus/5
