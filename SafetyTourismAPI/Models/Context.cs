@@ -19,5 +19,7 @@ namespace SafetyTourismAPI.Models
         public DbSet<SafetyTourismAPI.Models.Zona> Zona { get; set; }
 
         public DbSet<SafetyTourismAPI.Models.Recomendacoe> Recomendacoe { get; set; }
+
+        public DbSet<SafetyTourismAPI.Models.Virus> Virus { get; set; }
     }
 }
