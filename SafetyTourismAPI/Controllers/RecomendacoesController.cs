@@ -24,7 +24,7 @@ namespace SafetyTourismAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Recomendacoe>>> GetRecomendacoe()
         {
-            return await _context.Recomendacoe.ToListAsync();
+            return await _context.Recomendacoe.Include(p => p.Zona).ToListAsync();
         }
 
         // GET: api/Recomendacoes/5
