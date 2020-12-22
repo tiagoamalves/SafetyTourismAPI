@@ -76,7 +76,7 @@ namespace SafetyTourismAPI.Controllers
         [Route("~/api/paises/{paisId}/recomendacoes")]
         public async Task<IQueryable<Recomendacoe>> GetRecomendacoesByPaisAsync(string paisId)
         {
-            Pais pais = await _context.Paises.FindAsync(paisId);
+            var pais = await _context.Pais.FindAsync(paisId);
             return _context.Recomendacoe.Include(r => r.Zona).Where(c => c.IdZona == pais.Id);
         }
         
