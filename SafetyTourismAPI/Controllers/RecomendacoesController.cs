@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SafetyTourismAPI.Models;
+using SafetyTourismAPI.Data;
 
 namespace SafetyTourismAPI.Controllers
 {
@@ -71,7 +72,14 @@ namespace SafetyTourismAPI.Controllers
 
             return NoContent();
         }
-
+        // GET: Obter as recomendações válidas para o país referido
+        [Route("~/api/paises/{paisId}/recomendacoes")]
+        public async Task<IQueryable<Recomendacoe>> GetRecomendacoesByPaisAsync(string paisId)
+        {
+            Pais pais = await _context.Paises.FindAsync(paisId);
+            return _context.Recomendacoe.Include(r => r.Zona).Where(c => c.IdZona == pais.Id);
+        }
+        
         // POST: api/Recomendacoes
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]

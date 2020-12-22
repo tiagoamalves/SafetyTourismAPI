@@ -9,12 +9,14 @@ namespace SafetyTourismAPI.Models
 {
     public class Context : DbContext
     {
+        internal object Paises;
+
         public Context(DbContextOptions<Context> options)
             : base(options)
         {
         }
 
-        public DbSet<Pais> Pais { get; set; }
+        public DbSet<SafetyTourismAPI.Models.Pais> Pais { get; set; }
 
         public DbSet<SafetyTourismAPI.Models.Zona> Zona { get; set; }
 

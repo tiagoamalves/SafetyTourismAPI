@@ -15,5 +15,7 @@ namespace SafetyTourismAPI.Data
         }
 
         public DbSet<SafetyTourismAPI.Models.Virus> Virus { get; set; }
+
+        public DbSet<SafetyTourismAPI.Models.Pais> Pais { get; set; }
     }
 }
