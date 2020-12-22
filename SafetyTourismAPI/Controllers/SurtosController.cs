@@ -9,49 +9,44 @@ using SafetyTourismAPI.Models;
 
 namespace SafetyTourismAPI.Controllers
 {
-    [Route("api/Zonas")]
+    [Route("api/Surtos")]
     [ApiController]
-    public class ZonasController : ControllerBase
+    public class SurtosController : ControllerBase
     {
         private readonly Context _context;
 
-        public ZonasController(Context context)
+        public SurtosController(Context context)
         {
             _context = context;
         }
 
-        // GET: api/Zonas
+        // GET: api/Surtos
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Zona>>> GetZona()
+        public async Task<ActionResult<IEnumerable<Surtos>>> GetSurtos()
         {
-            return await _context.Zona.ToListAsync();
+            return await _context.Surtos.ToListAsync();
         }
 
-        // GET: api/Zonas/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Zona>> GetZona(long id)
+        // GET: api/Surtos/5
+        
+        [Route("~/api/Pais/{pais}/Surtos")]
+        public IQueryable<Surtos> GetSurtosByPais(long pais)
         {
-            var zona = await _context.Zona.FindAsync(id);
-
-            if (zona == null)
-            {
-                return NotFound();
-            }
-
-            return zona;
+            return _context.Surtos.Include(c => c.Zona).Include(c => c.pais)
+                .Where(c => c.Id == pais);
         }
-
-        // PUT: api/Zonas/5
+        
+        // PUT: api/Surtos/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutZona(long id, Zona zona)
+        public async Task<IActionResult> PutSurtos(long id, Surtos surtos)
         {
-            if (id != zona.Id)
+            if (id != surtos.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(zona).State = EntityState.Modified;
+            _context.Entry(surtos).State = EntityState.Modified;
 
             try
             {
@@ -59,7 +54,7 @@ namespace SafetyTourismAPI.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ZonaExists(id))
+                if (!SurtosExists(id))
                 {
                     return NotFound();
                 }
@@ -72,18 +67,18 @@ namespace SafetyTourismAPI.Controllers
             return NoContent();
         }
 
-        // POST: api/Zonas
+        // POST: api/Surtos
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Zona>> PostZona(Zona zona)
+        public async Task<ActionResult<Surtos>> PostSurtos(Surtos surtos)
         {
-            Zona z = await _context.Zona.SingleOrDefaultAsync(z => z.Name == zona.Name );
-            if (z == null)
+            Surtos c = await _context.Surtos.SingleOrDefaultAsync(c => c.VirusID == surtos.VirusID && c.Id == surtos.VirusID);
+            if (c == null)
             {
-                _context.Zona.Add(zona);
+                _context.Surtos.Add(surtos);
                 await _context.SaveChangesAsync();
 
-                return CreatedAtAction(nameof(GetZona), new { id = zona.Name}, zona);
+                return CreatedAtAction(nameof(GetSurtos), new { id = surtos.Id }, surtos);
             }
             else
             {
@@ -91,25 +86,25 @@ namespace SafetyTourismAPI.Controllers
             }
         }
 
-        // DELETE: api/Zonas/5
+        // DELETE: api/Surtos/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteZona(long id)
+        public async Task<IActionResult> DeleteSurtos(long id)
         {
-            var zona = await _context.Zona.FindAsync(id);
-            if (zona == null)
+            var surtos = await _context.Surtos.FindAsync(id);
+            if (surtos == null)
             {
                 return NotFound();
             }
 
-            _context.Zona.Remove(zona);
+            _context.Surtos.Remove(surtos);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool ZonaExists(long id)
+        private bool SurtosExists(long id)
         {
-            return _context.Zona.Any(e => e.Id == id);
+            return _context.Surtos.Any(e => e.Id == id);
         }
     }
 }

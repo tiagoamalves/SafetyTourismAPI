@@ -9,7 +9,7 @@ using SafetyTourismAPI.Models;
 
 namespace SafetyTourismAPI.Controllers
 {
-    [Route("api/paises")]
+    [Route("api/Paises")]
     [ApiController]
     public class PaisesController : ControllerBase
     {
