@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SafetyTourismAPI.Data;
 using SafetyTourismAPI.Models;
 
 namespace SafetyTourismAPI.Controllers
@@ -13,9 +14,9 @@ namespace SafetyTourismAPI.Controllers
     [ApiController]
     public class ZonasController : ControllerBase
     {
-        private readonly Context _context;
+        private readonly SafetyTourismAPIContext _context;
 
-        public ZonasController(Context context)
+        public ZonasController(SafetyTourismAPIContext context)
         {
             _context = context;
         }
@@ -24,14 +25,14 @@ namespace SafetyTourismAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Zona>>> GetZona()
         {
-            return await _context.Zona.ToListAsync();
+            return await _context.Zonas.ToListAsync();
         }
 
         // GET: api/Zonas/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Zona>> GetZona(long id)
         {
-            var zona = await _context.Zona.FindAsync(id);
+            var zona = await _context.Zonas.FindAsync(id);
 
             if (zona == null)
             {
@@ -77,10 +78,10 @@ namespace SafetyTourismAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Zona>> PostZona(Zona zona)
         {
-            Zona z = await _context.Zona.SingleOrDefaultAsync(z => z.Name == zona.Name );
+            Zona z = await _context.Zonas.SingleOrDefaultAsync(z => z.Name == zona.Name );
             if (z == null)
             {
-                _context.Zona.Add(zona);
+                _context.Zonas.Add(zona);
                 await _context.SaveChangesAsync();
 
                 return CreatedAtAction(nameof(GetZona), new { id = zona.Name}, zona);
@@ -95,13 +96,13 @@ namespace SafetyTourismAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteZona(long id)
         {
-            var zona = await _context.Zona.FindAsync(id);
+            var zona = await _context.Zonas.FindAsync(id);
             if (zona == null)
             {
                 return NotFound();
             }
 
-            _context.Zona.Remove(zona);
+            _context.Zonas.Remove(zona);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -109,7 +110,7 @@ namespace SafetyTourismAPI.Controllers
 
         private bool ZonaExists(long id)
         {
-            return _context.Zona.Any(e => e.Id == id);
+            return _context.Zonas.Any(e => e.Id == id);
         }
     }
 }
