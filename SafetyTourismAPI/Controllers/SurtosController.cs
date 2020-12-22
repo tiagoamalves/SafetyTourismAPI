@@ -28,8 +28,14 @@ namespace SafetyTourismAPI.Controllers
             return await _context.Surtos.ToListAsync();
         }
 
+        [Route("~/api/Virus/{virus}/Surtos")]
+        public IQueryable<Surtos> GetSurtosByVirus(long virus)
+        {
+            return _context.Surtos.Include(c => c.Virus).Where(c => c.VirusID == virus);
+        }
+
         // GET: api/Surtos/5
-        
+
         [Route("~/api/Pais/{pais}/Surtos")]
         public IQueryable<Surtos> GetSurtosByPais(long pais)
         {
