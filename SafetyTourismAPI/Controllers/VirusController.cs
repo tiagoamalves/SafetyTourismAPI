@@ -40,6 +40,12 @@ namespace SafetyTourismAPI.Controllers
 
             return virus;
         }
+        // NEW GET
+        [Route("~/api/surtos/Virus/{virusId}")]
+        public IQueryable<Surtos> GetVirusById(long Id)
+        {
+                return _context.Surtos.Include(s => s.Virus).Include(s => s.Zona).Where(s => s.VirusId == Id && s.DataFim == null);
+        }
 
         // PUT: api/Virus/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
