@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SafetyTourismAPI.Data;
 using SafetyTourismAPI.Models;
 
 namespace SafetyTourismAPI.Controllers
@@ -13,9 +14,9 @@ namespace SafetyTourismAPI.Controllers
     [ApiController]
     public class VirusController : ControllerBase
     {
-        private readonly Context _context;
+        private readonly SafetyTourismAPIContext _context;
 
-        public VirusController(Context context)
+        public VirusController(SafetyTourismAPIContext context)
         {
             _context = context;
         }

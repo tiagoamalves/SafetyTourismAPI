@@ -14,9 +14,9 @@ namespace SafetyTourismAPI.Controllers
     [ApiController]
     public class RecomendacoesController : ControllerBase
     {
-        private readonly Context _context;
+        private readonly SafetyTourismAPIContext _context;
 
-        public RecomendacoesController(Context context)
+        public RecomendacoesController(SafetyTourismAPIContext context)
         {
             _context = context;
         }
@@ -25,14 +25,14 @@ namespace SafetyTourismAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Recomendacoe>>> GetRecomendacoe()
         {
-            return await _context.Recomendacoe.Include(p => p.Zona).ToListAsync();
+            return await _context.Recomendacoes.Include(p => p.Zona).ToListAsync();
         }
 
         // GET: api/Recomendacoes/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Recomendacoe>> GetRecomendacoe(long id)
         {
-            var recomendacoe = await _context.Recomendacoe.FindAsync(id);
+            var recomendacoe = await _context.Recomendacoes.FindAsync(id);
 
             if (recomendacoe == null)
             {
@@ -74,21 +74,27 @@ namespace SafetyTourismAPI.Controllers
         }
         // GET: Obter as recomendações válidas para o país referido
         [Route("~/api/paises/{paisId}/recomendacoes")]
-        public async Task<IQueryable<Recomendacoe>> GetRecomendacoesByPaisAsync(string paisId)
+        public async Task<IQueryable<Recomendacoe>> GetRecomendacaoByPaisAsync(long paisId)
         {
-            var pais = await _context.Pais.FindAsync(paisId);
-            return _context.Recomendacoe.Include(r => r.Zona).Where(c => c.IdZona == pais.Id);
+            Pais pais = await _context.Pais.FindAsync(paisId);
+            return _context.Recomendacoes.Include(r => r.Zona).Where(c => c.IdZona == pais.IdZona);
         }
-        
+
+        //public IQueryable<Recomendacoe> GetRecomendacoesByPais(long paisId)
+        //{
+        //    return _context.Recomendacoe.Include(c => c.Zona).Include(c => c.Pais).Where(c => c.IdPais == paisId);
+        //}
+
+
         // POST: api/Recomendacoes
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Recomendacoe>> PostRecomendacoe(Recomendacoe recomendacoe)
         {
-            Recomendacoe r = await _context.Recomendacoe.SingleOrDefaultAsync(r => r.IdZona == recomendacoe.IdZona);
+            Recomendacoe r = await _context.Recomendacoes.SingleOrDefaultAsync(r => r.IdZona == recomendacoe.IdZona);
             if (r == null)
             {
-                _context.Recomendacoe.Add(recomendacoe);
+                _context.Recomendacoes.Add(recomendacoe);
                 await _context.SaveChangesAsync();
 
                 return CreatedAtAction(nameof(GetRecomendacoe), new { id = recomendacoe.RecomendacoeId }, recomendacoe);
@@ -103,13 +109,13 @@ namespace SafetyTourismAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteRecomendacoe(long id)
         {
-            var recomendacoe = await _context.Recomendacoe.FindAsync(id);
+            var recomendacoe = await _context.Recomendacoes.FindAsync(id);
             if (recomendacoe == null)
             {
                 return NotFound();
             }
 
-            _context.Recomendacoe.Remove(recomendacoe);
+            _context.Recomendacoes.Remove(recomendacoe);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -117,7 +123,7 @@ namespace SafetyTourismAPI.Controllers
 
         private bool RecomendacoeExists(long id)
         {
-            return _context.Recomendacoe.Any(e => e.RecomendacoeId == id);
+            return _context.Recomendacoes.Any(e => e.RecomendacoeId == id);
         }
     }
 }
