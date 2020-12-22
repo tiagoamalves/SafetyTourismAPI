@@ -41,19 +41,13 @@ namespace SafetyTourismAPI.Controllers
 
             return virus;
         }
-        // NEW GET
-        [Route("~/api/surtos/Virus/{virusId}")]
-        public IQueryable<Surtos> GetVirusById(long Id)
-        {
-                return _context.Surtos.Include(s => s.Virus).Include(s => s.Zona).Where(s => s.VirusId == Id && s.DataFim == null);
-        }
-
+        
         // PUT: api/Virus/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutVirus(long id, Virus virus)
         {
-            if (id != virus.virusID)
+            if (id != virus.VirusID)
             {
                 return BadRequest();
             }
@@ -90,7 +84,7 @@ namespace SafetyTourismAPI.Controllers
                 _context.Virus.Add(virus);
                 await _context.SaveChangesAsync();
 
-                return CreatedAtAction(nameof(GetVirus), new { id = virus.virusID }, virus);
+                return CreatedAtAction(nameof(GetVirus), new { id = virus.VirusID }, virus);
             }
             else
             {
@@ -116,7 +110,7 @@ namespace SafetyTourismAPI.Controllers
 
         private bool VirusExists(long id)
         {
-            return _context.Virus.Any(e => e.virusID == id);
+            return _context.Virus.Any(e => e.VirusID == id);
         }
     }
 }

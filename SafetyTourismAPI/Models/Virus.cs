@@ -7,7 +7,8 @@ namespace SafetyTourismAPI.Models
 {
     public class Virus
     {
-        public long virusID { get; set; }
+        public long VirusID { get; set; }
+
         public string NomeVirus { get; set; }
     }
 }

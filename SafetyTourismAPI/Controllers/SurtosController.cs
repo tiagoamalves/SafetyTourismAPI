@@ -33,10 +33,17 @@ namespace SafetyTourismAPI.Controllers
         [Route("~/api/Pais/{pais}/Surtos")]
         public IQueryable<Surtos> GetSurtosByPais(long pais)
         {
-            return _context.Surtos.Include(c => c.Zona).Include(c => c.pais)
+            return _context.Surtos.Include(c => c.Zona).Include(c => c.Pais)
                 .Where(c => c.Id == pais);
         }
-        
+
+        // NEW GET: Obter informação sobre todos os surtos ativos associados ao vírus referido
+        [Route("~/api/Surtos/Virus/{VirusId}")]
+        public IQueryable<Surtos> GetVirusById(long Id)
+        {
+            return _context.Surtos.Include(s => s.Virus).Include(s => s.Zona).Where(s => s.VirusID == Id && s.DataFim == null);
+        }
+
         // PUT: api/Surtos/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
