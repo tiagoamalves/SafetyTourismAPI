@@ -41,7 +41,7 @@ namespace SafetyTourismAPI.Controllers
 
             return recomendacoe;
         }
-
+        // PUT: Editar a nota de recomendação    
         // PUT: api/Recomendacoes/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]

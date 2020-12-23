@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SafetyTourismAPI.Data;
@@ -79,6 +80,22 @@ namespace SafetyTourismAPI.Controllers
             }
 
             return NoContent();
+        }
+        
+          // PATCH: Alterar a data de fim do surto
+        [Route("~/api/surtos/{zonaId}/virusId")]
+        public IActionResult Patch(int id, [FromBody] JsonPatchDocument<Surtos> patchEntity)
+        {
+           var entity = _context.Surtos.Find(id);
+
+           if (entity == null)
+           {
+               return NotFound();
+           }
+
+           patchEntity.ApplyTo(entity, ModelState); // Must have Microsoft.AspNetCore.Mvc.NewtonsoftJson installed
+
+           return Ok(entity);
         }
 
         // POST: api/Surtos
