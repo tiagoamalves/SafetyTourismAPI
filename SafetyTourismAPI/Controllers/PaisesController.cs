@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using SafetyTourismAPI.Models;
 
 namespace SafetyTourismAPI.Controllers
 {
+    [EnableCors("MyAllowSpecificOrigins")]
     [Route("api/Paises")]
     [ApiController]
     public class PaisesController : ControllerBase
@@ -22,6 +24,7 @@ namespace SafetyTourismAPI.Controllers
         }
 
         // GET: api/Paises
+        [EnableCors("MyAllowSpecificOrigins")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Pais>>> GetPais()
         {
@@ -29,13 +32,14 @@ namespace SafetyTourismAPI.Controllers
         }
 
         // GET: api/Paises/5
+        [EnableCors]
         [HttpGet("{id}")]
         public IQueryable<Pais> GetPaisById(long id)
         {
             return _context.Pais.Include(p => p.IdZona).Where(p => p.Id == id);
         }
-        
-        
+
+
         //public async Task<ActionResult<Pais>> GetPais(long id)
         //{
         //    var pais = await _context.Pais.FindAsync(id);
@@ -50,6 +54,7 @@ namespace SafetyTourismAPI.Controllers
 
         // PUT: api/Paises/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [EnableCors]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPais(long id, Pais pais)
         {
@@ -81,6 +86,7 @@ namespace SafetyTourismAPI.Controllers
 
         // POST: api/Paises
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [EnableCors]
         [HttpPost]
         public async Task<ActionResult<Pais>> PostPais(Pais pais)
         {
@@ -106,6 +112,7 @@ namespace SafetyTourismAPI.Controllers
 
 
         // DELETE: api/Paises/5
+        [EnableCors]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePais(long id)
         {

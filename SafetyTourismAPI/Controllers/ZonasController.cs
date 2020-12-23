@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using SafetyTourismAPI.Models;
 
 namespace SafetyTourismAPI.Controllers
 {
+    [EnableCors("MyAllowSpecificOrigins")]
     [Route("api/Zonas")]
     [ApiController]
     public class ZonasController : ControllerBase
@@ -22,6 +24,7 @@ namespace SafetyTourismAPI.Controllers
         }
 
         // GET: api/Zonas
+        [EnableCors("MyAllowSpecificOrigins")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Zona>>> GetZona()
         {
@@ -29,6 +32,7 @@ namespace SafetyTourismAPI.Controllers
         }
 
         // GET: api/Zonas/5
+        [EnableCors]
         [HttpGet("{id}")]
         public async Task<ActionResult<Zona>> GetZona(long id)
         {
@@ -44,6 +48,7 @@ namespace SafetyTourismAPI.Controllers
 
         // PUT: api/Zonas/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [EnableCors]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutZona(long id, Zona zona)
         {
@@ -75,6 +80,7 @@ namespace SafetyTourismAPI.Controllers
 
         // POST: api/Zonas
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [EnableCors]
         [HttpPost]
         public async Task<ActionResult<Zona>> PostZona(Zona zona)
         {
@@ -93,6 +99,7 @@ namespace SafetyTourismAPI.Controllers
         }
 
         // DELETE: api/Zonas/5
+        [EnableCors]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteZona(long id)
         {

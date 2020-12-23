@@ -32,6 +32,18 @@ namespace SafetyTourismAPI
             services.AddDbContext<SafetyTourismAPIContext>(opt =>
                                                opt.UseInMemoryDatabase("STapiContext"));
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy("MyAllowSpecificOrigins",
+                builder =>
+                {
+                    builder.WithOrigins("http://localhost:44393",
+                                        " http://myDeployedWebSite")
+                                        .AllowAnyHeader()
+                                        .AllowAnyMethod();
+                });
+
+            });
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -55,6 +67,8 @@ namespace SafetyTourismAPI
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors("MyAllowSpecificOrigins");
 
             app.UseAuthorization();
 
