@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.JsonPatch;
+//using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SafetyTourismAPI.Data;
@@ -45,7 +45,7 @@ namespace SafetyTourismAPI.Controllers
         }
 
         // NEW GET: Obter informação sobre todos os surtos ativos associados ao vírus referido
-        [Route("~/api/Surtos/Virus/{VirusId}")]
+        [Route("~/api/Surtos/Virus/{Id}")]
         public IQueryable<Surtos> GetVirusById(long Id)
         {
             return _context.Surtos.Include(s => s.Virus).Include(s => s.Zona).Where(s => s.VirusID == Id && s.DataFim == null);
@@ -82,7 +82,7 @@ namespace SafetyTourismAPI.Controllers
             return NoContent();
         }
         
-          // PATCH: Alterar a data de fim do surto
+        /* PATCH: Alterar a data de fim do surto
         [Route("~/api/surtos/{zonaId}/virusId")]
         public IActionResult Patch(int id, [FromBody] JsonPatchDocument<Surtos> patchEntity)
         {
@@ -97,6 +97,7 @@ namespace SafetyTourismAPI.Controllers
 
            return Ok(entity);
         }
+        */
 
         // POST: api/Surtos
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
