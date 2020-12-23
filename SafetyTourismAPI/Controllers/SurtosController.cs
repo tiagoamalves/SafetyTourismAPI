@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
-//using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SafetyTourismAPI.Data;
@@ -11,6 +12,7 @@ using SafetyTourismAPI.Models;
 
 namespace SafetyTourismAPI.Controllers
 {
+    [EnableCors("MyAllowSpecificOrigins")]
     [Route("api/Surtos")]
     [ApiController]
     public class SurtosController : ControllerBase
@@ -23,12 +25,13 @@ namespace SafetyTourismAPI.Controllers
         }
 
         // GET: api/Surtos
+        [EnableCors("MyAllowSpecificOrigins")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Surtos>>> GetSurtos()
         {
             return await _context.Surtos.ToListAsync();
         }
-
+        [EnableCors]
         [Route("~/api/Virus/{virus}/Surtos")]
         public IQueryable<Surtos> GetSurtosByVirus(long virus)
         {
@@ -36,7 +39,7 @@ namespace SafetyTourismAPI.Controllers
         }
 
         // GET: api/Surtos/5
-
+        [EnableCors]
         [Route("~/api/Pais/{pais}/Surtos")]
         public IQueryable<Surtos> GetSurtosByPais(long pais)
         {
@@ -45,7 +48,8 @@ namespace SafetyTourismAPI.Controllers
         }
 
         // NEW GET: Obter informação sobre todos os surtos ativos associados ao vírus referido
-        [Route("~/api/Surtos/Virus/{Id}")]
+        [EnableCors]
+        [Route("~/api/Surtos/Virus/{VirusId}")]
         public IQueryable<Surtos> GetVirusById(long Id)
         {
             return _context.Surtos.Include(s => s.Virus).Include(s => s.Zona).Where(s => s.VirusID == Id && s.DataFim == null);
@@ -53,6 +57,7 @@ namespace SafetyTourismAPI.Controllers
 
         // PUT: api/Surtos/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [EnableCors]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutSurtos(long id, Surtos surtos)
         {
@@ -81,8 +86,9 @@ namespace SafetyTourismAPI.Controllers
 
             return NoContent();
         }
-        
-        /* PATCH: Alterar a data de fim do surto
+
+        // PATCH: Alterar a data de fim do surto
+        [EnableCors]
         [Route("~/api/surtos/{zonaId}/virusId")]
         public IActionResult Patch(int id, [FromBody] JsonPatchDocument<Surtos> patchEntity)
         {
@@ -97,10 +103,10 @@ namespace SafetyTourismAPI.Controllers
 
            return Ok(entity);
         }
-        */
 
         // POST: api/Surtos
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [EnableCors]
         [HttpPost]
         public async Task<ActionResult<Surtos>> PostSurtos(Surtos surtos)
         {
@@ -119,6 +125,7 @@ namespace SafetyTourismAPI.Controllers
         }
 
         // DELETE: api/Surtos/5
+        [EnableCors]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteSurtos(long id)
         {

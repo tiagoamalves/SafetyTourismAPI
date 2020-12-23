@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SafetyTourismAPI.Models;
 using SafetyTourismAPI.Data;
+using Microsoft.AspNetCore.Cors;
 
 namespace SafetyTourismAPI.Controllers
 {
+    [EnableCors("MyAllowSpecificOrigins")]
     [Route("api/Recomendacoes")]
     [ApiController]
     public class RecomendacoesController : ControllerBase
@@ -22,6 +24,7 @@ namespace SafetyTourismAPI.Controllers
         }
 
         // GET: api/Recomendacoes
+        [EnableCors("MyAllowSpecificOrigins")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Recomendacoe>>> GetRecomendacoe()
         {
@@ -29,6 +32,7 @@ namespace SafetyTourismAPI.Controllers
         }
 
         // GET: api/Recomendacoes/5
+        [EnableCors]
         [HttpGet("{id}")]
         public async Task<ActionResult<Recomendacoe>> GetRecomendacoe(long id)
         {
@@ -44,6 +48,7 @@ namespace SafetyTourismAPI.Controllers
         // PUT: Editar a nota de recomendação    
         // PUT: api/Recomendacoes/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [EnableCors]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutRecomendacoe(long id, Recomendacoe recomendacoe)
         {
@@ -73,6 +78,7 @@ namespace SafetyTourismAPI.Controllers
             return NoContent();
         }
         // GET: Obter as recomendações válidas para o país referido
+        [EnableCors]
         [Route("~/api/paises/{paisId}/recomendacoes")]
         public async Task<IQueryable<Recomendacoe>> GetRecomendacaoByPaisAsync(long paisId)
         {
@@ -88,6 +94,7 @@ namespace SafetyTourismAPI.Controllers
 
         // POST: api/Recomendacoes
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [EnableCors]
         [HttpPost]
         public async Task<ActionResult<Recomendacoe>> PostRecomendacoe(Recomendacoe recomendacoe)
         {
@@ -106,6 +113,7 @@ namespace SafetyTourismAPI.Controllers
         }
 
         // DELETE: api/Recomendacoes/5
+        [EnableCors]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteRecomendacoe(long id)
         {

@@ -39,6 +39,19 @@ namespace SafetyTourismAPI
             services.AddMvc(options => options.EnableEndpointRouting = false);
             services.AddDbContext<SafetyTourismAPIContext>(opt =>
                                                opt.UseInMemoryDatabase("STapiContext"));
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("MyAllowSpecificOrigins",
+                builder =>
+                {
+                    builder.WithOrigins("http://localhost:44393",
+                                        " http://myDeployedWebSite")
+                                        .AllowAnyHeader()
+                                        .AllowAnyMethod();
+                });
+
+            });
             services.AddCors();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
             
@@ -102,6 +115,8 @@ namespace SafetyTourismAPI
                 .AllowAnyHeader());
 
             app.UseAuthentication();
+            app.UseCors("MyAllowSpecificOrigins");
+
             app.UseAuthorization();
             app.UseMvc();
             app.UseMiddleware<JwtMiddleware>();
