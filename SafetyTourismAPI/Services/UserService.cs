@@ -8,12 +8,14 @@ using System.Security.Claims;
 using System.Text;
 using SafetyTourismAPI.Helpers;
 using SafetyTourismAPI.Models;
+using SafetyTourismAPI.Entities;
+using User = SafetyTourismAPI.Entities.User;
 
 namespace SafetyTourismAPI.Services
 {
     public interface IUserService
     {
-        AuthenticateResponse Authenticate(AuthenticateRequest model);
+        User Authenticate(string username, string password);
         IEnumerable<User> GetAll();
         User GetById(int id);
     }
@@ -23,11 +25,12 @@ namespace SafetyTourismAPI.Services
         // users hardcoded for simplicity, store in a db with hashed passwords in production applications
         private List<User> _users = new List<User>
         {
-            new User { Id = 1, FirstName = "Victor", LastName = "Duarte", Username = "Duarte01", Password = "safetytourism01" },
-            new User { Id = 2, FirstName = "Tiago", LastName = "Alves", Username = "Tiago02", Password = "safetytourism02" },
-            new User { Id = 3, FirstName = "Paulo", LastName = "Torcato", Username = "Paulo03", Password = "safetytourism03" },
-            new User { Id = 4, FirstName = "Pedro", LastName = "Casimiro", Username = "Pedro04", Password = "safetytourism04" },
-            new User { Id = 5, FirstName = "Leandro", LastName = "Caetano", Username = "Leandro05", Password = "safetytourism05" }
+            new User { Id = 1, FirstName = "Victor", LastName = "Duarte", Username = "Duarte01", Password = "safetytourism01", Role = Role.Admin },
+            new User { Id = 2, FirstName = "Tiago", LastName = "Alves", Username = "Tiago02", Password = "safetytourism02", Role = Role.Admin },
+            new User { Id = 3, FirstName = "Paulo", LastName = "Torcato", Username = "Paulo03", Password = "safetytourism03", Role = Role.Admin },
+            new User { Id = 4, FirstName = "Pedro", LastName = "Casimiro", Username = "Pedro04", Password = "safetytourism04", Role = Role.Admin },
+            new User { Id = 5, FirstName = "Leandro", LastName = "Caetano", Username = "Leandro05", Password = "safetytourism05", Role = Role.Admin },
+            new User { Id = 6, FirstName = "Utilizador", LastName = "teste", Username = "Utilizador05", Password = "safetytourism06", Role = Role.User}
         };
 
         private readonly AppSettings _appSettings;
@@ -37,44 +40,54 @@ namespace SafetyTourismAPI.Services
             _appSettings = appSettings.Value;
         }
 
-        public AuthenticateResponse Authenticate(AuthenticateRequest model)
+        public User Authenticate(string username, string password)
         {
-            var user = _users.SingleOrDefault(x => x.Username == model.Username && x.Password == model.Password);
+            var user = _users.SingleOrDefault(x => x.Username == username && x.Password == password);
 
             // return null if user not found
-            if (user == null) return null;
+            if (user == null)
+                return null;
 
             // authentication successful so generate jwt token
-            var token = generateJwtToken(user);
-
-            return new AuthenticateResponse(user, token);
-        }
-
-        public IEnumerable<User> GetAll()
-        {
-            return _users;
-        }
-
-        public User GetById(int id)
-        {
-            return _users.FirstOrDefault(x => x.Id == id);
-        }
-
-        // helper methods
-
-        private string generateJwtToken(User user)
-        {
-            // generate token that is valid for 7 days
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[] { new Claim("id", user.Id.ToString()) }),
+                Subject = new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, user.Id.ToString()),
+                    new Claim(ClaimTypes.Role, user.Role)
+                }),
                 Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
+            user.Token = tokenHandler.WriteToken(token);
+
+            // remove password before returning
+            user.Password = null;
+
+            return user;
+        }
+
+        public IEnumerable<User> GetAll()
+        {
+            // return users without passwords
+            return _users.Select(x => {
+                x.Password = null;
+                return x;
+            });
+        }
+
+        public User GetById(int id)
+        {
+            var user = _users.FirstOrDefault(x => x.Id == id);
+
+            // return user without password
+            if (user != null)
+                user.Password = null;
+
+            return user;
         }
     }
 }
