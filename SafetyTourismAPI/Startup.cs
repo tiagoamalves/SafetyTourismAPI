@@ -14,6 +14,8 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using SafetyTourismAPI.Models;
 using SafetyTourismAPI.Data;
+using SafetyTourismAPI.Helpers;
+using SafetyTourismAPI.Services;
 
 namespace SafetyTourismAPI
 {
@@ -50,6 +52,9 @@ namespace SafetyTourismAPI
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "SafetyTourismAPI", Version = "v1" });
             });
 
+            services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
+            services.AddScoped<IUserService, UserService>();
+
             services.AddDbContext<SafetyTourismAPIContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("SafetyTourismAPIContext")));
         }
@@ -67,10 +72,15 @@ namespace SafetyTourismAPI
             app.UseHttpsRedirection();
 
             app.UseRouting();
+            app.UseCors(x => x
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
 
             app.UseCors("MyAllowSpecificOrigins");
 
             app.UseAuthorization();
+            app.UseMiddleware<JwtMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {
