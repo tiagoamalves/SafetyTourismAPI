@@ -34,23 +34,22 @@ namespace SafetyTourismAPI.Controllers
         // GET: api/Paises/5
         [EnableCors]
         [HttpGet("{id}")]
-        public IQueryable<Pais> GetPaisById(long id)
-        {
-            return _context.Pais.Include(p => p.IdZona).Where(p => p.Id == id);
-        }
-
-
-        //public async Task<ActionResult<Pais>> GetPais(long id)
+        //public IQueryable<Pais> GetPaisById(long id)
         //{
-        //    var pais = await _context.Pais.FindAsync(id);
-
-        //    if (pais == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return pais;
+        //    return _context.Pais.Include(p => p.IdZona).Where(p => p.Id == id);
         //}
+
+        public async Task<ActionResult<Pais>> GetPais(long id)
+        {
+            var pais = await _context.Pais.FindAsync(id);
+
+            if (pais == null)
+            {
+                return NotFound();
+            }
+
+            return pais;
+        }
 
         // PUT: api/Paises/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
